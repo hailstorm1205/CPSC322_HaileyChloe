@@ -1,3 +1,14 @@
+'''
+Programmer: Hailey Mueller
+Class: CPSC 322-01, Spring 2021
+Assignment: Final Project
+Date Last Updated: 4/22/21
+    
+Description: This file contains the functions that splits the dataset based on the given parameters.
+    The algorithms are train test split, k-fold cross validation, and stratified k-fold cross validation.
+    This file also holds the function that creates a confusion matrix for the given data.
+'''
+
 import numpy as np
 import copy
 import mysklearn.myutils as myutils

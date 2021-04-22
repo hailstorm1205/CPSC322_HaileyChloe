@@ -1,13 +1,12 @@
 '''
 Programmer: Hailey Mueller
 Class: CPSC 322-01, Spring 2021
-Assignment: #3
-Date Last Updated: February 25th, 2021
-Bonus?: I attempted the first bonus. Couldn't figure out how to properly plot the data, though.
+Assignment: Final Project
+Date Last Updated: 4/22/21
 Sources Used:
     https://matplotlib.org/stable/gallery/lines_bars_and_markers/barchart.html
     
-Desceiption: This file plots the data for video games, automobiles, and movies.
+Desceiption: This file contains the utility functions for plotting data.
 '''
 
 import matplotlib.pyplot as plt

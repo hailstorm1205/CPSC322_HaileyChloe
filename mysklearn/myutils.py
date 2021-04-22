@@ -1,3 +1,12 @@
+'''
+Programmer: Chloe Crawford & Hailey Mueller
+Class: CPSC 322-01, Spring 2021
+Assignment: Final Project
+Date Last Updated: 4/22/21
+    
+Description: This file contains various utility functions used for our classifiers.
+'''
+
 import math
 import csv
 import copy

@@ -1,9 +1,8 @@
 '''
 Programmer: Hailey Mueller
 Class: CPSC 322-01, Spring 2021
-Assignment: #2
-Date Last Updated: 2/18/21
-Bonus?: No, I have not attempted the bonus.
+Assignment: Final Project
+Date Last Updated: 4/22/21
 
 Description: This file creates the class MyPyTable that uses a list of data with a header and 
     manipulates that data in various ways.
