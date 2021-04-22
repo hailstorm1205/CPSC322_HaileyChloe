@@ -12,6 +12,7 @@ Description: This file creates the class MyPyTable that uses a list of data with
 import copy
 import csv
 import mysklearn.myutils as myutils
+import numpy as np
 from tabulate import tabulate # uncomment if you want to use the pretty_print() method
 # install tabulate with: pip install tabulate
 
@@ -359,7 +360,7 @@ class MyPyTable:
                 else: #odd
                     medVal = colList[int((len(colList)-1)/2)]
                 #Calculate other summary stats & Add to new list
-                newList.append([col,min(colList),max(colList),(min(colList)+max(colList))/2,sum(colList)/len(colList),medVal])
+                newList.append([col,min(colList),max(colList),(min(colList)+max(colList))/2,np.round(sum(colList)/len(colList),3),medVal])
 
         print(tabulate(newList,["attr","min","max","mid","avg","med"]))
 

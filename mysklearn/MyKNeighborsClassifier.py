@@ -1,4 +1,4 @@
-import utils as utils
+import mysklearn.myutils as utils
 
 class MyKNeighborsClassifier:
     """Represents a simple k nearest neighbors classifier.
