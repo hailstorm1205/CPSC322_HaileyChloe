@@ -84,7 +84,7 @@ class MyKNeighborsClassifier:
             distance_temp = []
             neighbor_temp = []
             for j in range(len(X_test[i])):
-                distance_temp.append(utils.calc_distance(self.X_train[i][j], self.X_train[i + 1][j], X_test[i][j], X_test[i + 1][j]))
+                distance_temp.append(myutils.calc_distance(self.X_train[i][j], self.X_train[i + 1][j], X_test[i][j], X_test[i + 1][j]))
                 neighbor_temp.append(i)
             distances.append(distance_temp)
             neighbor_indices.append(neighbor_temp)
@@ -243,3 +243,170 @@ class MyDecisionTreeClassifier:
             attribute_names = myutils.create_header(len(self.X_train[0]))
 
         myutils.print_rules(self.tree,attribute_names,class_name)
+
+class MyNaiveBayesClassifier:
+    """Represents a Naive Bayes classifier.
+
+    Attributes:
+        X_train(list of list of obj): The list of training instances (samples). 
+                The shape of X_train is (n_train_samples, n_features)
+        y_train(list of obj): The target y values (parallel to X_train). 
+            The shape of y_train is n_samples
+        priors(YOU CHOOSE THE MOST APPROPRIATE TYPE): The prior probabilities computed for each
+            label in the training set.
+        posteriors(YOU CHOOSE THE MOST APPROPRIATE TYPE): The posterior probabilities computed for each
+            attribute value/label pair in the training set.
+
+    Notes:
+        Loosely based on sklearn's Naive Bayes classifiers: https://scikit-learn.org/stable/modules/naive_bayes.html
+        Terminology: instance = sample = row and attribute = feature = column
+    """
+    def __init__(self):
+        """Initializer for MyNaiveBayesClassifier.
+
+        """
+        self.X_train = None 
+        self.y_train = None
+        self.priors = None 
+        self.posteriors = None
+
+    def fit(self, X_train, y_train):
+        """Fits a Naive Bayes classifier to X_train and y_train.
+
+        Args:
+            X_train(list of list of obj): The list of training instances (samples). 
+                The shape of X_train is (n_train_samples, n_features)
+            y_train(list of obj): The target y values (parallel to X_train)
+                The shape of y_train is n_train_samples
+
+        Notes:
+            Since Naive Bayes is an eager learning algorithm, this method computes the prior probabilities
+                and the posterior probabilities for the training data.
+            You are free to choose the most appropriate data structures for storing the priors
+                and posteriors.
+        """
+        self.X_train = X_train
+        self.y_train = y_train
+        
+        # Determine self.priors
+
+        # category_indexes = {cat1: [val1,...valn], ..., catn: [val1,...,val2]}
+        category_indexes = {}
+        for i, row in enumerate(X_train):
+            try:
+                category_indexes[y_train[i]]
+                #Value in dictionary
+                category_indexes[y_train[i]].append(i)
+            except:
+                #Value not in dictionary
+                category_indexes[y_train[i]] = [i]
+
+        # self.priors = {cat1: val, ..., catn: val}
+        self.priors = {}
+        for key, values in category_indexes.items():
+            self.priors[key] = len(values)/len(X_train)
+
+        # Determine self.posteriors
+
+        #Initialize y-category posteriors
+        self.posteriors = {}
+        for index, key in enumerate(self.priors):
+            self.posteriors[key] = {}
+
+        for i in range(len(self.X_train[0])):
+            self.posteriors[key][i] = {}
+
+        #This for loop is necessary to make sure all categories
+        #are being added to posteriors, even if probability = 0
+        posterior_categories = [] #2d array
+        for row in self.X_train:
+            for i, value in enumerate(row):
+                try:
+                    #Value already in array
+                    posterior_categories[i].index(value)
+                except:
+                    try:
+                        #Add value to list
+                        posterior_categories[i].append(value)
+                    except:
+                        #Need to make new list
+                        posterior_categories.append([value])
+
+        #Sorts rows that have int values for testing
+        for row in posterior_categories:
+            if(type(row[0]) is int):
+                row.sort()
+
+        # self.posteriors = {cat1: {0: {0: val, ..., n: val}, ..., n: {...}}, ..., catn: {{...}}}
+        for key, values in category_indexes.items():
+            for j in range(len(self.X_train[0])):
+                # j represents the index of the attribute being used
+                self.posteriors[key][j] = {} 
+                newList = []
+                for index in values:
+                    # index represents the indexes of the 
+                    # rows in the given category
+                    newList.append(X_train[index][j])
+
+                counts = {}
+                #Initialize counts
+                for value in posterior_categories[j]:
+                    counts[value] = 0
+                
+                for value in newList:
+                    counts[value] += 1
+
+                for k,value in counts.items():
+                    counts[k] = value/len(newList)
+
+                self.posteriors[key][j] = counts
+
+    def predict(self, X_test):
+        """Makes predictions for test instances in X_test.
+
+        Args:
+            X_test(list of list of obj): The list of testing samples
+                The shape of X_test is (n_test_samples, n_features)
+
+        Returns:
+            y_predicted(list of obj): The predicted target y values (parallel to X_test)
+        """
+        #Initialize Probabilities 2D Dictionary
+        #that will store all the probabilities
+        probabilities = {}
+        for test in range(len(X_test)):
+            probabilities["Test: {}".format(test+1)] = {}
+
+        #Loop through posteriors and add probabilities to probabilities
+        #dictionary accordingly
+        for x in range(len(X_test)): # in case there are multiple test cases
+            for i in self.posteriors: #category (ex. yes/no)
+                probabilities["Test: {}".format(x+1)][i] = []
+                for j in self.posteriors[i]: #column (ex. standing, job_status)
+                    try:
+                        probabilities["Test: {}".format(x+1)][i].append(self.posteriors[i][j][X_test[x][j]])
+                    except:
+                        probabilities["Test: {}".format(x+1)][i].append(0)
+
+        #Determine which Naive Bayes probability is greater
+        #in order to predict y value
+        y_predicted = []
+        index = 0
+        for i in probabilities: #each test case
+            prevProbability = 0.0
+            for j in probabilities[i]: #each category
+                probability = 1.0
+                for value in probabilities[i][j]: #list
+                    probability*=value
+                probability*=self.priors[j]
+                try:
+                    y_predicted[index]
+                    if(prevProbability < probability):
+                        y_predicted[index] = j
+                        prevProbability = probability
+                except:
+                    y_predicted.append(j)
+                    prevProbability = probability
+            index+=1
+
+        return y_predicted
