@@ -2,11 +2,11 @@
 Programmer: Hailey Mueller & Chloe Crawford
 Class: CPSC 322-01, Spring 2021
 Assignment: Final Project
-Date Last Updated: 4/22/21
+Date Last Updated: 5/03/21
 Bonus?: TBD
 
 Description: This file holds the classifier classes used for our final project. Those classifiers
-    include the Random Forest, kNN, and Decision Tree classifiers.
+    include the Random Forest, Naive Bayes, and Decision Tree classifiers.
 '''
 
 import mysklearn.myutils as myutils
@@ -16,15 +16,60 @@ import copy
 class MyRandomForestClassifier:
     """ Represents a simple Random Forest classifier.
     Attributes:
-        tbd
+        N(int): Number of trees to be generated
+        M(int): Subset of "better" trees to be used to make decisions
+        trees(list of MyDecisionTreeClassifier obj): List of all of the decision trees that 
+            make up the forest
+        X_train(list of list of obj): The list of training instances (samples). 
+            The shape of X_train is (n_train_samples, n_features)
+        y_train(list of obj): The target y values (parallel to X_train). 
+            The shape of y_train is n_samples
     Notes:
-        tbd
+        I decided to make a list of decision tree objects because that already covers a lot of the functionality
+            that we will need. The only problem is using compute_random_subset() right before the call to 
+            select_attribute() in tdidt. Obviously we don't want to use that methodology for the first 
+            decision tree classifier test, so we'll have to figure that out
     """
-    def __init__(self):
-        pass
+    def __init__(self, N=100, M=30):
+        self.N = N
+        self.M = M
+        self.trees = None
+        self.X_train = None
+        self.y_train = None
 
-    def fit(self):
-        pass
+    def fit(self, X_train, y_train, X_test, y_test):
+        """Fits many decision tree classifiers to X_train and y_train using the TDIDT (top down induction of decision tree) algorithm.
+
+        Args:
+            X_train(list of list of obj): The list of training instances (samples). 
+                The shape of X_train is (n_train_samples, n_features)
+            y_train(list of obj): The target y values (parallel to X_train)
+                The shape of y_train is n_train_samples
+            X_test(list of list of obj): The list of testing instances, used to determine accuracy of trees
+            y_test(list of obj): The target y values (parallel to X_test), used to determine accuracy of trees
+
+        Notes:
+            
+        """
+        # Call train_test_split to get "test" and "remainder" data (happens before this function is called)
+        # Loop N times
+        #   Call compute_bootstrapped_sample to get a subset of the "remainder" data
+        #   Call tdidt with the bootstrapped sample to build a decision tree
+        # Test performance of all trees to get the M best ones
+        # Use majority voting to make predictions (predict method)
+        self.X_train = X_train
+        self.y_train = y_train
+        N_trees = []
+        for _ in range(len(self.N)):
+            new_X_train, new_y_train = myutils.compute_bootstrapped_sample(X_train, y_train)
+            tree = MyDecisionTreeClassifier()
+            tree.fit(new_X_train, new_y_train)
+            N_trees.append(tree)
+
+        self.trees = []
+        # Test tree performance
+        #   for the M best trees, append them to self.trees
+        #   (I don't know how to do this)
 
     def predict(self):
         pass

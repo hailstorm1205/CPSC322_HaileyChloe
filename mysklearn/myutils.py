@@ -2,7 +2,7 @@
 Programmer: Chloe Crawford & Hailey Mueller
 Class: CPSC 322-01, Spring 2021
 Assignment: Final Project
-Date Last Updated: 4/22/21
+Date Last Updated: 5/03/21
     
 Description: This file contains various utility functions used for our classifiers.
 '''
@@ -512,3 +512,38 @@ def print_rules(tree, attribute_names, class_name, rule_string="IF"):
     else:
         rule_string = rule_string + " THEN {} == {}".format(class_name, tree[1])
         print(rule_string)
+
+def compute_random_subset(values, num_values):
+    """ A helper function that returns a random subset of values of size num_values
+
+    Args:
+        values(list): a list of values
+        num_values(int): the size of the subset of values to be returned
+
+    Returns:
+        shuffled(list): a random list of size num_values 
+    """
+    shuffled = values[:]
+    random.shuffle(shuffled)
+    return shuffled[:num_values]
+
+def compute_bootstrapped_sample(X_table, y_table):
+    """ A helper function to build a training set using the bootstrapping method
+
+    Args:
+        X_table(list of list): the X_train data 
+        y_table(list of obj): the y_train data
+
+    Returns:
+        X_sample(list of list): a randomly selected subset of table
+        y_sample(list of obj): a parallel list to X_sample
+
+    """
+    n = len(table)
+    X_sample = []
+    y_sample = []
+    for _ in range(n):
+        rand_index = random.randrange(0, n)
+        X_sample.append(X_table[rand_index])
+        y_sample.append(y_table[rand_index])
+    return X_sample, y_sample 
