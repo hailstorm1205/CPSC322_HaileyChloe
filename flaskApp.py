@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 import pickle
+import os
 
 # Make a Flask app
 app = Flask(__name__)
