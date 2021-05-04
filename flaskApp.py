@@ -1,11 +1,12 @@
 from flask import Flask
 import pickle
 
+# Make a Flask app
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
-    return "<h1>Hello World!</h1>"
+    return "<h1>Hello World!</h1>", 200
 
 if __name__ == "__main__":
     port = os.environ.get("PORT", 5000) # Heroku will set the PORT environment variable for web traffic
