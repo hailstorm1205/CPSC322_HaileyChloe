@@ -1,3 +1,13 @@
+"""
+Programmer: Hailey Mueller
+Class: CPSC 322-01, Spring 2021
+Assignment: Final Project
+Date Last Updated: 5/03/21
+Bonus?: TBD
+
+Description: This file creates a flask application for our final project.
+"""
+
 from flask import Flask, jsonify, request
 import pickle
 import os
