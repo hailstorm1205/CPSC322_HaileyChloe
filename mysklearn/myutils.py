@@ -305,7 +305,7 @@ def create_list(oldList):
         oldList(list of list of obj): 2D list that holds attributes in a given partition.
 
     Returns:
-        newList(list of obj): 1D list of all the calculated values in a partition.
+        testList(list of obj): 1D list of all the calculated values in a partition.
     """
 
     #If list is empty...
@@ -317,11 +317,11 @@ def create_list(oldList):
     index = len(oldList[0])-1
 
     #Create new list
-    newList = []
+    testList = []
     for value in oldList:
-        newList.append(value[index])
+        testList.append(value[index])
 
-    return newList
+    return testList
 
 def calculate_entropy(prob):
     """ Simple function that calculates entropy given a probability
@@ -463,7 +463,7 @@ def classify_tdidt(header,tree,instance):
             value_list = tree[i]
             if value_list[1] == instance_value:
                 # we have a match! recurse!
-                return tdit_predict(header,value_list[2],instance)
+                return classify_tdidt(header,value_list[2],instance)
         return 0
     else: #leaf
         return tree[1]
@@ -547,3 +547,159 @@ def compute_bootstrapped_sample(X_table, y_table):
         X_sample.append(X_table[rand_index])
         y_sample.append(y_table[rand_index])
     return X_sample, y_sample 
+
+def categorize_dataset(oldList):
+    """
+    Args:
+        oldList(list of list of obj): 2D list of either X_train or X_test values
+
+    Returns:
+        testList(list of list of obj): 2D list of new categorized values
+    """
+
+    newList = []
+    for test in oldList:
+        testList = []
+        for i,value in enumerate(test):
+            if(i==0): # fixed acidity
+                if(value <= 6):
+                    testList.append(1)
+                elif(value <= 8):
+                    testList.append(2)
+                elif(value <= 10):
+                    testList.append(3)
+                elif(value <= 12):
+                    testList.append(4)
+                elif(value <= 14):
+                    testList.append(5)
+                else:
+                    testList.append(6)
+            elif(i==1): # volatile acidity
+                if(value <= 0.4):
+                    testList.append(1)
+                elif(value <= 0.70):
+                    testList.append(2)
+                elif(value <= 1):
+                    testList.append(3)
+                elif(value <= 1.3):
+                    testList.append(4)
+                else:
+                    testList.append(5)
+            elif(i==2): # citric acid
+                if(value <= 0.2):
+                    testList.append(1)
+                elif(value <= 0.4):
+                    testList.append(2)
+                elif(value <= 0.6):
+                    testList.append(3)
+                elif(value <= 0.8):
+                    testList.append(4)
+                else:
+                    testList.append(5)
+            elif(i==3): # residual sugars
+                if(value <= 0.4):
+                    testList.append(1)
+                elif(value <= 0.7):
+                    testList.append(2)
+                elif(value <= 1):
+                    testList.append(3)
+                elif(value <= 1.3):
+                    testList.append(4)
+                else:
+                    testList.append(5)
+            elif(i==4): # chlorides
+                if(value <= 0.1):
+                    testList.append(1)
+                elif(value <= 0.2):
+                    testList.append(2)
+                elif(value <= 0.3):
+                    testList.append(3)
+                elif(value <= 0.4):
+                    testList.append(4)
+                elif(value <= 0.5):
+                    testList.append(5)
+                elif(value <= 0.6):
+                    testList.append(6)
+                else:
+                    testList.append(7)
+            elif(i==5): # free sulfur dioxide
+                if(value <= 20):
+                    testList.append(1)
+                elif(value <= 40):
+                    testList.append(2)
+                elif(value <= 60):
+                    testList.append(3)
+                else:
+                    testList.append(4)
+            elif(i==6): # total sulfur dioxide
+                if(value <= 20):
+                    testList.append(1)
+                elif(value <= 40):
+                    testList.append(2)
+                elif(value <= 60):
+                    testList.append(3)
+                elif(value <= 80):
+                    testList.append(4)
+                elif(value <= 100):
+                    testList.append(5)
+                else:
+                    testList.append(6)
+            elif(i==7): # density
+                if(value <= 0.994):
+                    testList.append(1)
+                elif(value <= 0.996):
+                    testList.append(2)
+                elif(value <= 0.997):
+                    testList.append(3)
+                elif(value <= 0.998):
+                    testList.append(4)
+                elif(value <= 1):
+                    testList.append(5)
+                elif(value <= 1.002):
+                    testList.append(6)
+                else:
+                    testList.append(7)
+            elif(i==8): # pH
+                if(value <= 3):
+                    testList.append(1)
+                elif(value <= 3.2):
+                    testList.append(2)
+                elif(value <= 3.3):
+                    testList.append(3)
+                elif(value <= 3.4):
+                    testList.append(4)
+                elif(value <= 3.6):
+                    testList.append(5)
+                else:
+                    testList.append(6)
+            elif(i==9): # sulphates
+                if(value <= 0.4):
+                    testList.append(1)
+                elif(value <= 0.6):
+                    testList.append(2)
+                elif(value <= 0.8):
+                    testList.append(3)
+                elif(value <= 1.0):
+                    testList.append(4)
+                elif(value <= 2.0):
+                    testList.append(5)
+                else:
+                    testList.append(6)
+            elif(i==10): # alcohol
+                if(value <= 9):
+                    testList.append(1)
+                elif(value <= 10):
+                    testList.append(2)
+                elif(value <= 11):
+                    testList.append(3)
+                elif(value <= 12):
+                    testList.append(4)
+                elif(value <= 13):
+                    testList.append(5)
+                elif(value <= 14):
+                    testList.append(6)
+                else:
+                    testList.append(7)
+        newList.append(testList)
+
+    return newList
