@@ -10,6 +10,8 @@ Description: This file contains various utility functions used for our classifie
 import math
 import csv
 import copy
+import random
+import numpy as np
 
 # Splits dataset into test and train data
 def train_test_split(X, y, test_size):
@@ -376,7 +378,7 @@ def all_same_class(instances):
             return False 
     return True # if we get here, all instance labels matched the first label
 
-def tdidt(current_instances, available_attributes, attribute_domains, previous_instances=None):
+def tdidt(current_instances, available_attributes, attribute_domains, is_forest, previous_instances=None):
     """ This is a recursive function that puts into use the
         TDIDT (ie. Top-Down Induction of Decision Trees) algorithm.
 
@@ -385,6 +387,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, previous_i
         available_attributes(list of str): attribute strings
         attribute_domains(dict): a dictionary of the attributes and their given values
         previous_instances(list of list of obj): list of instances in the previous partition.
+        is_forest(bool): determines if this was called for a random forest
 
     Return:
         tree(list of obj): returns a list that represents a tree
@@ -404,7 +407,15 @@ def tdidt(current_instances, available_attributes, attribute_domains, previous_i
     if(previous_instances == None):
         previous_instances = len(current_instances)
 
-    split_attribute = select_attribute(current_instances, available_dict)
+    split_attribute = None
+    if is_forest:
+        F = 2
+        if len(current_instances) < 2:
+            F = len(current_instances)
+        curr_subset = compute_random_subset(current_instances, F)
+        split_attribute = select_attribute(curr_subset, available_dict)
+    else:
+        split_attribute = select_attribute(current_instances, available_dict)
     available_attributes.remove(split_attribute)
     # cannot split on the same attribute twice in a branch
     # recall: python is pass by object reference!!
@@ -434,7 +445,7 @@ def tdidt(current_instances, available_attributes, attribute_domains, previous_i
             max_index = sums.index(max(sums)) #finds index of the max count
             return ["Leaf",values[max_index],len(current_instances),previous_instances]
         else: # all base cases are false... recurse!!
-            subtree = tdidt(partition, available_attributes.copy(),attribute_domains, len(current_instances))
+            subtree = tdidt(partition, available_attributes.copy(),attribute_domains, is_forest, len(current_instances))
             # need to append subtree to value_subtree and appropriately append value subtree
             # to tree
             value_subtree.append(subtree)
@@ -539,7 +550,7 @@ def compute_bootstrapped_sample(X_table, y_table):
         y_sample(list of obj): a parallel list to X_sample
 
     """
-    n = len(table)
+    n = len(X_table)
     X_sample = []
     y_sample = []
     for _ in range(n):
