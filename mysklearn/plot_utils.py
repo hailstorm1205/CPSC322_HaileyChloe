@@ -147,12 +147,13 @@ def approach_two(column):
     #Show the plot
     plt.show()
 
-def createHistogram(name, column):
+def createHistogram(name, column, num):
     """Creates histogram.
 
         Args:
             name(str): value being plotted.
             column(list): list of data used to get information from
+            num(int): number to label image
 
         Notes:
             Used in AutoData.ipynb
@@ -165,7 +166,7 @@ def createHistogram(name, column):
     plt.hist(column, bins=10)
     
     #Create title
-    plt.title("{} Histogram".format(name))
+    plt.title("Fig. " + str(num) + ": {}".format(name))
     plt.xlabel("{} Ratings".format(name))
     plt.ylabel("Frequency")
     
