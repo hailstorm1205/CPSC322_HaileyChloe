@@ -46,7 +46,7 @@ class MyRandomForestClassifier:
                 The shape of X_train is (n_train_samples, n_features)
             y_train(list of obj): The target y values (parallel to X_train)
                 The shape of y_train is n_train_samples
-            X_test(list of list of obj): The list of testing instances, used to determine accuracy of trees
+            X_test(list of list of obj): The list of testing samples, used to determine accuracy of trees
             y_test(list of obj): The target y values (parallel to X_test), used to determine accuracy of trees
 
         Notes:
@@ -80,14 +80,34 @@ class MyRandomForestClassifier:
             accuracy_list.append(myutils.calculateAccuracy(accuracy, len(y_test) - accuracy))
         prev_best = 1.1
         M_indexes = np.argpartition(accuracy_list, -self.M)[-self.M:]
-        print(accuracy_list)
-        print(M_indexes)
         for index in M_indexes:
             self.trees.append(N_trees[index])
         
 
-    def predict(self):
-        pass
+    def predict(self, X_test):
+        """ Uses majority voting in the decision forest to predict y values
+
+        Args:
+            X_test(list of list of obj): The list of testing samples
+
+        Returns:
+            y_predicted(list of obj): The predicted target y values (parallel to X_test)
+
+        Notes:
+            
+        """
+        y_predicted = []
+        for i in range(len(X_test)):
+            y_temp = []
+            for tree in self.trees:
+                temp = tree.predict(X_test)
+                y_temp.append(temp[0])
+            values, value_sums = myutils.get_frequencies(y_temp)
+            max_val = max(value_sums)
+            max_index = value_sums.index(max_val)
+            y_predicted.append(values[max_index])
+        
+        return y_predicted
 
 # Taken from Hailey's Code
 class MyDecisionTreeClassifier:
