@@ -20,7 +20,7 @@ based on 12 given attributes.
 
 ## Installation
 
-In order to fun the flask application locally on your machine, you will need to run the "flaskApp.py" file.
+In order to run the flask application locally on your machine, you will need to run the "flaskApp.py" file.
 
 ```bash
 python3 flaskApp.py
