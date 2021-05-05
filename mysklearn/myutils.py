@@ -2,7 +2,7 @@
 Programmer: Chloe Crawford & Hailey Mueller
 Class: CPSC 322-01, Spring 2021
 Assignment: Final Project
-Date Last Updated: 5/03/21
+Date Last Updated: 5/04/21
     
 Description: This file contains various utility functions used for our classifiers.
 '''
@@ -558,6 +558,18 @@ def compute_bootstrapped_sample(X_table, y_table):
         X_sample.append(X_table[rand_index])
         y_sample.append(y_table[rand_index])
     return X_sample, y_sample 
+
+def prepend_attribute_label(table, header):
+    """ Prepends the attribute label onto the values in the table
+
+    Args:
+        table(list of list): the table of data
+        header(list): the names of the columns in the table
+
+    """
+    for row in table:
+        for i in range(len(row)):
+            row[i] = header[i] + "=" + str(row[i])
 
 def categorize_dataset(oldList):
     """

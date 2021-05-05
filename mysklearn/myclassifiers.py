@@ -2,7 +2,7 @@
 Programmer: Hailey Mueller & Chloe Crawford
 Class: CPSC 322-01, Spring 2021
 Assignment: Final Project
-Date Last Updated: 5/03/21
+Date Last Updated: 5/04/21
 Bonus?: TBD
 
 Description: This file holds the classifier classes used for our final project. Those classifiers
@@ -26,10 +26,7 @@ class MyRandomForestClassifier:
         y_train(list of obj): The target y values (parallel to X_train). 
             The shape of y_train is n_samples
     Notes:
-        I decided to make a list of decision tree objects because that already covers a lot of the functionality
-            that we will need. The only problem is using compute_random_subset() right before the call to 
-            select_attribute() in tdidt. Obviously we don't want to use that methodology for the first 
-            decision tree classifier test, so we'll have to figure that out
+        
     """
     def __init__(self, N=100, M=30):
         self.N = N
