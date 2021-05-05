@@ -29,7 +29,7 @@ def predict():
     tweets = request.args.get("tweets", "")
     phd = request.args.get("phd", "")
     print("level:", level, lang, tweets, phd)
-    
+
     '''fixed_acidity = request.args.get("fixed acidity", "")
     volatile_acidity = request.args.get("volatile acidity","")
     citric_acid = request.args.get("citric acid","")
@@ -90,5 +90,5 @@ def predict_well(instance):
         return None
 
 if __name__ == "__main__":
-    port = os.environ.get("PORT", 5000) # Heroku will set the PORT environment variable for web traffic
+    port = int(os.environ.get("PORT", 5000)) # Heroku will set the PORT environment variable for web traffic
     app.run(debug=False, host="0.0.0.0", port=port) # TODO: set debug=False before deployment!
