@@ -61,10 +61,10 @@ class MyRandomForestClassifier:
         self.X_train = X_train
         self.y_train = y_train
         N_trees = []
-        for _ in range(len(self.N)):
+        for _ in range(self.N):
             new_X_train, new_y_train = myutils.compute_bootstrapped_sample(X_train, y_train)
             tree = MyDecisionTreeClassifier()
-            tree.fit(new_X_train, new_y_train)
+            tree.fit(new_X_train, new_y_train, is_forest=True)
             N_trees.append(tree)
 
         self.trees = []
@@ -79,7 +79,7 @@ class MyRandomForestClassifier:
                     accuracy += 1
             accuracy_list.append(myutils.calculateAccuracy(accuracy, len(y_test) - accuracy))
         prev_best = 1.1
-        M_indexes = np.argpartition(accuracy_list, -M)[-M:]
+        M_indexes = np.argpartition(accuracy_list, -self.M)[-self.M:]
         print(accuracy_list)
         print(M_indexes)
         for index in M_indexes:
@@ -112,7 +112,7 @@ class MyDecisionTreeClassifier:
         self.y_train = None
         self.tree = None
 
-    def fit(self, X_train, y_train):
+    def fit(self, X_train, y_train, is_forest=False):
         """Fits a decision tree classifier to X_train and y_train using the TDIDT (top down induction of decision tree) algorithm.
 
         Args:
@@ -120,6 +120,7 @@ class MyDecisionTreeClassifier:
                 The shape of X_train is (n_train_samples, n_features)
             y_train(list of obj): The target y values (parallel to X_train)
                 The shape of y_train is n_train_samples
+            is_forest(bool): determines whether this fit was called by MyRandomForestClassifier
 
         Notes:
             Since TDIDT is an eager learning algorithm, this method builds a decision tree model
@@ -159,7 +160,7 @@ class MyDecisionTreeClassifier:
         train = [X_train[i] + [y_train[i]] for i in range(len(X_train))]
         # initial call to tdidt current instances is the whole table (train)
         available_attributes = header.copy() # python is pass object reference
-        self.tree = myutils.tdidt(train, available_attributes, attribute_domains)
+        self.tree = myutils.tdidt(train, available_attributes, attribute_domains, is_forest)
         
     def predict(self, X_test):
         """Makes predictions for test instances in X_test.
