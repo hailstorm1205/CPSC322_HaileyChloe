@@ -1,9 +1,18 @@
+"""
+Programmer: Hailey Mueller
+Class: CPSC 322-01, Spring 2021
+Assignment: Final Project
+Date Last Updated: 5/04/21
+Bonus?: TBD
+
+Description: This file creates a flask predictor file for our final project.
+"""
+
 import requests # lib to make http requests
 import json # lib to help with parsing JSON objects
 
-# url = "https://interview-flask-app.herokuapp.com/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
-url = "http://127.0.0.0:5000/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
-#url = "https://cpsc322-finalproject2.herokuapp.com/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
+#Create url
+url = "http://127.0.0.0:5000/predict?fixed_acidity=2&volatile_acidity=1&citric_acid=4&residual_sugar=5&chlorides=2&free_sulfur=1&total_sulfur=1&density=6&pH=3&sulphates=6&alcohol=4"
 
 
 # make a GET request to get the search results back
