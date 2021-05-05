@@ -20,10 +20,6 @@ app = Flask(__name__)
 def index():
     return "<h1>Hello World!</h1>", 200
 
-@app.route("/test", methods=["GET"])
-def test():
-    return "<h1>TESTING</h1>", 300
-
 # one for the /predict 
 @app.route("/predict", methods=["GET"])
 def predict():
